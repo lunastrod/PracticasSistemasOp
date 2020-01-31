@@ -1,11 +1,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "list.h"
+/*
+List
+newList(){
 
 
+}
 
 void
-holaMundo()
-{
-  printf("hola mundo");
+delete(List l){
+
+
 }
+*/
