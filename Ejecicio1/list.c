@@ -9,7 +9,7 @@ struct Node{
 };
 
 struct List{
-  int size;//no estoy seguro de si ponerlo
+  int size;
   Node * head;
   Node * tail;
 };
@@ -26,11 +26,10 @@ List * newList(){
 void deleteList(List * l){
   Node * n;
 
-  for(n = l->head; n->next!=NULL; n=n->next){
+  for(n = l->head; n!=NULL; n=n->next){
     free(n->data);
     free(n);
   }
-  free(n);
   free(l);
 }
 
@@ -84,8 +83,28 @@ void addRight(List * l, Coor * c){
 void debugPrintList(List * l){
   Node * n;
 
-  for(n = l->head; n->next!=NULL; n=n->next){
-    printf("%d, ",n->data->x);
+  printf("NULL<->");
+  for(n = l->head; n!=NULL; n=n->next){
+    printf(" %d <->",n->data->x);
   }
-  printf("%d\n",n->data->x);
+  printf("NULL\n");
 }
+
+Coor * searchXY(List * l, int x, int y){
+  Node * n;
+
+  for(n = l->head; n!=NULL; n=n->next){
+  }
+
+}
+/*
+Coor * searchTag(List * l, char * tag[]){
+
+
+}
+
+void erase(List * l, Coor * c){
+
+
+}
+*/
