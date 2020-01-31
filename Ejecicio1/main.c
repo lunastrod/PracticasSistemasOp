@@ -23,11 +23,11 @@ main(int argc, char *argv[])
   l=newList();
 
   c.x=1;
-  addRight(l,c);
+  addRight(l,&c);
   c.x=2;
-  addRight(l,c);
+  addRight(l,&c);
   c.x=3;
-  addRight(l,c);
+  addLeft(l,&c);
   debugPrintList(l);
 
   deleteList(l);
