@@ -3,25 +3,11 @@ enum{
 };
 
 typedef struct Coor Coor;
-struct Coor{
-  int x;
-  int y;
-  char tag[tagSize];
-};
-
+struct Coor;
 typedef struct Node Node;
-struct Node{
-  Coor data;
-  Node * next;
-  Node * prev;
-};
-
+struct Node;
 typedef struct List List;
-struct List{
-  int size;
-  Node * head;
-  Node * tail;
-};
+struct List;
 
 List * newList(void);//crear una lista vacía
 void delete(List * l);//destruir la lista

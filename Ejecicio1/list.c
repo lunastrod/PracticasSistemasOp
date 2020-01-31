@@ -2,6 +2,25 @@
 #include <stdio.h>
 #include "list.h"
 
+struct Coor{
+  int x;
+  int y;
+  char tag[tagSize];
+};
+
+struct Node{
+  Coor data;
+  Node * next;
+  Node * prev;
+};
+
+struct List{
+  int size;//no estoy seguro de si ponerlo
+  Node * head;
+  Node * tail;
+};
+
+
 List *
 newList(){
   static List * l;
