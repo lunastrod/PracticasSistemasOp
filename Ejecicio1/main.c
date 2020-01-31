@@ -14,12 +14,13 @@ main(int argc, char *argv[])
   exit(EXIT_SUCCESS);
 }
 */
+
 int
 main(int argc, char *argv[])
 {
   List * l;
   l=newList();
 
-  
+  deleteList(l);
   exit(EXIT_SUCCESS);
 }

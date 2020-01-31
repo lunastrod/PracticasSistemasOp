@@ -10,7 +10,7 @@ typedef struct List List;
 struct List;
 
 List * newList(void);//crear una lista vacía
-void delete(List * l);//destruir la lista
+void deleteList(List * l);//destruir la lista
 
 char isEmpty(List l);//preguntar si una lista está vacía
 int size(List l);//preguntar el número de elementos de la lista
