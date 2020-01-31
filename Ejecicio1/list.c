@@ -17,13 +17,22 @@ struct List{
 
 List * newList(){
   static List * l;
+
   l = malloc(sizeof(List));
   //TODO: if(l==NULL){} //por si no tiene memoria
   l->size=0;
   return l;
 }
 
-void deleteList(List * l){free(l);}
+void deleteList(List * l){
+  Node * n;
+
+  free(l);
+  for(n = l->head; n->next!=NULL; n=n->next){
+    free(n);
+  }
+  free(n);
+}
 
 char isEmpty(List * l){return l->size==0;}
 int size(List * l){return l->size;}
@@ -32,6 +41,7 @@ Coor last(List * l){return l->tail->data;}
 
 Node * newNode(){
   static Node * n;
+
   n = malloc(sizeof(Node));
   n->next=NULL;
   n->prev=NULL;
@@ -40,6 +50,7 @@ Node * newNode(){
 
 void addLeft(List * l, Coor c){
   Node * n = newNode();
+
   n->data=c;
   switch (l->size) {
     case 0:
@@ -55,6 +66,7 @@ void addLeft(List * l, Coor c){
 }
 void addRight(List * l, Coor c){
   Node * n = newNode();
+
   n->data=c;
   switch (l->size) {
     case 0:
@@ -71,6 +83,7 @@ void addRight(List * l, Coor c){
 
 void debugPrintList(List * l){
   Node * n;
+  
   for(n = l->head; n->next!=NULL; n=n->next){
     printf("%d, ",n->data.x);
   }
