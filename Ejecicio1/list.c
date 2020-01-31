@@ -31,6 +31,6 @@ newList(){
 }
 
 void
-delete(List * l){
+deleteList(List * l){
   free(l);
 }
