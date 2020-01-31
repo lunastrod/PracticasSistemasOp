@@ -5,7 +5,7 @@
 int
 main(int argc, char *argv[])
 {
-  Coord c = {10,11};
+  Coor c = {10,11};
   printf("(%d, %d)\n",c.x,c.y);
   exit(EXIT_SUCCESS);
 }

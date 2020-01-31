@@ -1,9 +1,9 @@
 
 
-struct Coord{
+struct Coor{
   int x;
   int y;
 };
-typedef struct Coord Coord;
+typedef struct Coor Coor;
 
 void holaMundo();
