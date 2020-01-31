@@ -10,10 +10,8 @@ newList(){
   l->size=0;
   return l;
 }
-/*
+
 void
-delete(List l){
-
-
+delete(List * l){
+  free(l);
 }
-*/
