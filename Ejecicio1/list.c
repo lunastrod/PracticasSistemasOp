@@ -53,14 +53,26 @@ void addLeft(List * l){
       l->tail=n;
       break;
     default:
+      n->next=l->head;
+      l->head->prev=n;
+      l->head=n;
+  }
+  l->size++;
+}
+void addRight(List * l){
+  Node * n = newNode();
+  //TODO: meter datos en el nodo
+  switch (l->size) {
+    case 0:
+      l->head=n;
+      l->tail=n;
+      break;
+    default:
       n->prev=l->tail;
       l->tail->next=n;
       l->tail=n;
   }
   l->size++;
-}
-void addRight(List * l){
-
 }
 
 Coor searchXY(List * l, int x, int y){
