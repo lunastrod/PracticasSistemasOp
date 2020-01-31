@@ -5,6 +5,7 @@
 int
 main(int argc, char *argv[])
 {
-  holaMundo();
+  Coord c = {10,11};
+  printf("(%d, %d)\n",c.x,c.y);
   exit(EXIT_SUCCESS);
 }
