@@ -21,8 +21,7 @@ struct List{
 };
 
 
-List *
-newList(){
+List * newList(){
   static List * l;
   l = malloc(sizeof(List));
   //TODO: if(l==NULL){} //por si no tiene memoria
@@ -30,7 +29,9 @@ newList(){
   return l;
 }
 
-void
-deleteList(List * l){
-  free(l);
-}
+void deleteList(List * l){free(l);}
+
+char isEmpty(List * l){return l->size==0;}
+int size(List * l){return l->size;}
+Coor first(List * l){return l->head->data;}
+Coor last(List * l){return l->tail->data;}
