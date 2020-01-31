@@ -18,8 +18,17 @@ main(int argc, char *argv[])
 int
 main(int argc, char *argv[])
 {
+  Coor c;
   List * l;
   l=newList();
+
+  c.x=1;
+  addRight(l,c);
+  c.x=2;
+  addRight(l,c);
+  c.x=3;
+  addRight(l,c);
+  debugPrintList(l);
 
   deleteList(l);
   exit(EXIT_SUCCESS);

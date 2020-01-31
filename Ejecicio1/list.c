@@ -2,12 +2,6 @@
 #include <stdio.h>
 #include "list.h"
 
-struct Coor{
-  int x;
-  int y;
-  char tag[tagSize];
-};
-
 struct Node{
   Coor data;
   Node * next;
@@ -44,9 +38,9 @@ Node * newNode(){
   return n;
 }
 
-void addLeft(List * l){
+void addLeft(List * l, Coor c){
   Node * n = newNode();
-  //TODO: meter datos en el nodo
+  n->data=c;
   switch (l->size) {
     case 0:
       l->head=n;
@@ -59,9 +53,9 @@ void addLeft(List * l){
   }
   l->size++;
 }
-void addRight(List * l){
+void addRight(List * l, Coor c){
   Node * n = newNode();
-  //TODO: meter datos en el nodo
+  n->data=c;
   switch (l->size) {
     case 0:
       l->head=n;
@@ -75,6 +69,15 @@ void addRight(List * l){
   l->size++;
 }
 
+void debugPrintList(List * l){
+  Node * n;
+  for(n = l->head; n->next!=NULL; n=n->next){
+    printf("%d, ",n->data.x);
+  }
+  printf("%d\n",n->data.x);
+}
+
+/*
 Coor searchXY(List * l, int x, int y){
 
 
@@ -87,3 +90,4 @@ void erase(List * l, Coor * c){
 
 
 }
+*/
