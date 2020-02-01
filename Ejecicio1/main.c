@@ -29,6 +29,12 @@ main(int argc, char *argv[])
   c.x=3;
   addLeft(l,&c);
   debugPrintList(l);
+  erase(l,searchXY(l, 2,0));
+  debugPrintList(l);
+  erase(l,searchXY(l, 3,0));
+  debugPrintList(l);
+  erase(l,searchXY(l, 1,0));
+  debugPrintList(l);
 
   deleteList(l);
   exit(EXIT_SUCCESS);

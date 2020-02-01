@@ -119,7 +119,8 @@ Coor * searchXY(List * l, int x, int y){
   Node * n;
 
   for(n = l->head; n!=NULL; n=n->next){
-    if(n->data->x==x && n->data->x==y)
+    //fprintf(stderr, "%d-%d, %d-%d\n", n->data->y,x,n->data->x,y);
+    if(n->data->x==x && n->data->y==y)
       return n->data;
   }
   return NULL;
