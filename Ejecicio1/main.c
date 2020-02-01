@@ -18,22 +18,17 @@ main(int argc, char *argv[])
 int
 main(int argc, char *argv[])
 {
-  Coor c;
+  Coor c={0,0,"hola"};
   List * l;
   l=newList();
-  c.y=0;
+  addRight(l,&c);
   c.x=1;
+  c.tag[0]='a';
   addRight(l,&c);
-  c.x=2;
-  addRight(l,&c);
-  c.x=3;
-  addLeft(l,&c);
   debugPrintList(l);
-  erase(l,searchXY(l, 2,0));
-  debugPrintList(l);
-  erase(l,searchXY(l, 3,0));
-  debugPrintList(l);
-  erase(l,searchXY(l, 1,0));
+
+  Coor pff={0,0,"aola"};
+  erase(l,searchTag(l,&pff.tag));
   debugPrintList(l);
 
   deleteList(l);
