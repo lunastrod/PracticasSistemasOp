@@ -28,7 +28,27 @@ Node * newNode(Coor * c){
   return n;
 }
 
-void deleteNode(Node * n){
+void deleteNode(List * l, Node * n){
+  //me aseguro de que la lista sigue conectada antes de borrar un nodo
+  if(n!=l->head && n!=l->tail){//eliminar un nodo central
+    n->prev->next=n->next;
+    n->next->prev=n->prev;
+  }
+  else if( l->size > 1){
+    if(n==l->head){//eliminar la cabeza
+      l->head=n->next;
+      n->next->prev=NULL;
+    }
+    if(n==l->tail){//eliminar la cola
+      l->tail=n->prev;
+      n->prev->next=NULL;
+    }
+  }
+  else{//eliminar el unico elemento de la lista
+    l->head=NULL;
+    l->tail=NULL;
+  }
+  l->size--;
   free(n->data);
   free(n);
 }
@@ -46,12 +66,12 @@ void deleteList(List * l){
   Node * n;
 
   for(n = l->head; n!=NULL; n=n->next){
-    deleteNode(n);
+    deleteNode(l, n);
   }
   free(l);
 }
 
-char isEmpty(List * l){return l->size==0;}
+int isEmpty(List * l){return l->size==0;}
 int size(List * l){return l->size;}
 Coor * first(List * l){return l->head->data;}
 Coor * last(List * l){return l->tail->data;}
@@ -115,9 +135,13 @@ Coor * searchTag(List * l, char * tag[]){
   return NULL;
 }
 
-/*
 void erase(List * l, Coor * c){
-
-
+  Node * n;
+  //busco el nodo en el que está c
+  for(n = l->head; n!=NULL; n=n->next){
+    if(n->data==c)
+      break;//cuando lo encuentres deja de buscar
+  }
+  //ahora n es el nodo que contiene c
+  if(n!=NULL) deleteNode(l, n);
 }
-*/

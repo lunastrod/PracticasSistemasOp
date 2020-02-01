@@ -21,7 +21,7 @@ main(int argc, char *argv[])
   Coor c;
   List * l;
   l=newList();
-
+  c.y=0;
   c.x=1;
   addRight(l,&c);
   c.x=2;

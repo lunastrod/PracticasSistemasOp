@@ -17,7 +17,7 @@ struct List;
 List * newList(void);//crear una lista vacía
 void deleteList(List * l);//destruir la lista
 
-char isEmpty(List * l);//preguntar si una lista está vacía
+int isEmpty(List * l);//preguntar si una lista está vacía
 int size(List * l);//preguntar el número de elementos de la lista
 Coor * first(List * l);//determinar el primer elemento (o la "cabeza") de una lista
 Coor * last(List * l);//determinar el último elemento (o la "cola") de una lista
