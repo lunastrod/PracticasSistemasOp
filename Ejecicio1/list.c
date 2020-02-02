@@ -141,7 +141,7 @@ Coor * searchTag(List * l, char tag[]){
   Node * n;
 
   for(n = l->head; n!=NULL; n=n->next){
-    if(strcmp(tag,(n->data->tag)))
+    if(strcmp(tag,(n->data->tag))==0)//si son iguales
       return n->data;
   }
   return NULL;
