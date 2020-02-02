@@ -13,7 +13,7 @@ struct List{
   Node * head;
   Node * tail;
 };
-Node * newNode(Coor * c){
+Node * newNode(Coor c){
   static Node * n;
 
   n = malloc(sizeof(Node));
@@ -21,7 +21,7 @@ Node * newNode(Coor * c){
   n->prev=NULL;
 
   n->data = malloc(sizeof(Coor));
-  *(n->data) = *c;//copio la coordenada c entera en el nuevo espacio de memoria del heap
+  *(n->data) = c;//copio la coordenada c en el nuevo espacio de memoria del heap
 
   return n;
 }
@@ -76,7 +76,7 @@ void printList(List *l){
   Node * n;
 
   for(n = l->head; n!=NULL; n=n->next){
-    printf("%s:(%d,%d) ",n->data->tag,n->data->x,n->data->y);
+    printf("%s(%d,%d) ",n->data->tag,n->data->x,n->data->y);
   }
   printf("\n");
 }
@@ -86,7 +86,7 @@ int size(List * l){return l->size;}
 Coor * first(List * l){return l->head->data;}
 Coor * last(List * l){return l->tail->data;}
 
-void addLeft(List * l, Coor * c){
+void addLeft(List * l, Coor c){
   Node * n = newNode(c);
   switch (l->size) {
     case 0:
@@ -100,7 +100,7 @@ void addLeft(List * l, Coor * c){
   }
   l->size++;
 }
-void addRight(List * l, Coor * c){
+void addRight(List * l, Coor c){
   Node * n = newNode(c);
   switch (l->size) {
     case 0:
@@ -169,13 +169,13 @@ void printStack(Stack * s){
   printList(s->list);
 }
 
-void push(Stack * s, Coor * c){
-  addLeft(s->list,c);
+void push(Stack * s, Coor c){
+  addRight(s->list,c);
 }
 Coor pop(Stack * s){
   Coor c;
-  c=*s->list->head->data;
-  deleteNode(s->list, s->list->head);
+  c=*s->list->tail->data;
+  deleteNode(s->list, s->list->tail);
   return c;
 }
 
@@ -202,12 +202,12 @@ void printQueue(Queue * q){
   printList(q->list);
 }
 
-void enqueue(Queue * q, Coor * c){
-  addLeft(q->list,c);
+void enqueue(Queue * q, Coor c){
+  addRight(q->list,c);
 }
 Coor dequeue(Queue * q){
   Coor c;
-  c=*q->list->tail->data;
-  deleteNode(q->list, q->list->tail);
+  c=*q->list->head->data;
+  deleteNode(q->list, q->list->head);
   return c;
 }

@@ -1,35 +1,57 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "list.h"
-/*
-int
-main(int argc, char *argv[])
-{
-  Coor c = {10,11};
-  c.tag[0]='h';
-  c.tag[1]='o';
-  c.tag[2]='l';
-  c.tag[3]='a';
-  printf("%s:(%d, %d)\n",c.tag,c.x,c.y);
-  exit(EXIT_SUCCESS);
-}
-*/
 
-int
-main(int argc, char *argv[])
-{
-  Coor c={0,0,"hola"};
-  List * l;
-  l=newList();
-  addRight(l,&c);
-  c.x=1;
-  c.tag[0]='a';
-  addRight(l,&c);
-  printList(l);
+enum{
+  listSize=6
+};
 
-  erase(l,searchTag(l,"aola"));
+int main(int argc, char *argv[]){
+  Coor c={0,0,""};
+  int a;
+  List * l = newList();
+  Stack * s= newStack();
+  Queue * q= newQueue();
+
+  for(a=0; a<=listSize; a++){
+    c.x=a;
+    c.y=a;
+    addRight(l,c);
+    push(s,c);
+    enqueue(q,c);
+  }
+  printf("list:  ");
   printList(l);
+  printf("stack: ");
+  printStack(s);
+  printf("queue: ");
+  printQueue(q);
+
+  for(a=0; a<=listSize; a+=2){
+    erase(l,searchXY(l,a,a));
+  }
+  printf("\nodds:      ");
+  printList(l);
+  printf("reverse:   ");
+  for(a=0; a<=listSize; a++){
+    c=pop(s);
+    printf("%s(%d,%d) ",c.tag,c.x,c.y);
+  }
+  printf("\nascending: ");
+  for(a=0; a<=listSize; a++){
+    c=dequeue(q);
+    printf("%s(%d,%d) ",c.tag,c.x,c.y);
+  }
+  printf("\n\n");
+
+  printf("list:  ");
+  printList(l);
+  printf("stack: ");
+  printStack(s);
+  printf("queue: ");
+  printQueue(q);
 
   deleteList(l);
-  exit(EXIT_SUCCESS);
+  deleteStack(s);
+  deleteQueue(q);
 }
