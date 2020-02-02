@@ -8,22 +8,11 @@ struct Node{
   Node * next;
   Node * prev;
 };
-
 struct List{
   int size;
   Node * head;
   Node * tail;
 };
-
-struct Stack{
-  List * list;
-};
-
-struct Queue{
-  List * list;
-};
-
-//new, delete
 Node * newNode(Coor * c){
   static Node * n;
 
@@ -61,6 +50,12 @@ void deleteNode(List * l, Node * n){
   free(n);
 }
 
+
+
+
+
+
+
 List * newList(){
   static List * l;
 
@@ -77,35 +72,6 @@ void deleteList(List * l){
   }
   free(l);
 }
-
-Stack * newStack(){
-  static Stack * s;
-  s->list=newList();
-  return s;
-}
-void deleteStack(Stack * s){
-  deleteList(s->list);
-}
-
-Queue * newQueue(){
-  static Queue * q;
-  q->list=newList();
-  return q;
-}
-void deleteQueue(Queue * q){
-  deleteList(q->list);
-}
-
-//print
-void debugPrintList(List * l){
-  Node * n;
-
-  printf("NULL<->");
-  for(n = l->head; n!=NULL; n=n->next){
-    printf(" %d <->",n->data->x);
-  }
-  printf("NULL\n");
-}
 void printList(List *l){
   Node * n;
 
@@ -113,10 +79,8 @@ void printList(List *l){
     printf("%s:(%d,%d) ",n->data->tag,n->data->x,n->data->y);
   }
   printf("\n");
-
 }
 
-//list
 int isEmpty(List * l){return l->size==0;}
 int size(List * l){return l->size;}
 Coor * first(List * l){return l->head->data;}
@@ -151,26 +115,6 @@ void addRight(List * l, Coor * c){
   l->size++;
 }
 
-void push(Stack * s, Coor * c){
-  addLeft(s->list,c);
-}
-Coor pop(Stack * s){
-  Coor c;
-  c=*s->list->head->data;
-  deleteNode(s->list, s->list->head);
-  return c;
-}
-
-void enqueue(Queue * q, Coor * c){
-  addLeft(q->list,c);
-}
-Coor dequeue(Queue * q){
-  Coor c;
-  c=*q->list->tail->data;
-  deleteNode(q->list, q->list->tail);
-  return c;
-}
-
 Coor * searchXY(List * l, int x, int y){
   Node * n;
 
@@ -202,4 +146,68 @@ void erase(List * l, Coor * c){
   if(n!=NULL) deleteNode(l, n);
 }
 
-//Stack
+
+
+
+
+struct Stack{
+  List * list;
+};
+
+Stack * newStack(){
+  static Stack * s;
+  s = malloc(sizeof(Stack));
+  s->list=newList();
+  return s;
+}
+void deleteStack(Stack * s){
+  deleteList(s->list);
+  free(s);
+}
+
+void printStack(Stack * s){
+  printList(s->list);
+}
+
+void push(Stack * s, Coor * c){
+  addLeft(s->list,c);
+}
+Coor pop(Stack * s){
+  Coor c;
+  c=*s->list->head->data;
+  deleteNode(s->list, s->list->head);
+  return c;
+}
+
+
+
+
+
+struct Queue{
+  List * list;
+};
+
+Queue * newQueue(){
+  static Queue * q;
+  q = malloc(sizeof(Queue));
+  q->list=newList();
+  return q;
+}
+void deleteQueue(Queue * q){
+  deleteList(q->list);
+  free(q);
+}
+
+void printQueue(Queue * q){
+  printList(q->list);
+}
+
+void enqueue(Queue * q, Coor * c){
+  addLeft(q->list,c);
+}
+Coor dequeue(Queue * q){
+  Coor c;
+  c=*q->list->tail->data;
+  deleteNode(q->list, q->list->tail);
+  return c;
+}
