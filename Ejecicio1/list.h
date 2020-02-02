@@ -26,7 +26,8 @@ void addLeft(List * l, Coor * c);//agregar una entidad al inicio de una lista
 void addRight(List * l, Coor * c);//agregar una entidad al final de una lista
 
 Coor * searchXY(List * l, int x, int y);//preguntar si una coordenada está en la lista pasando sus dos componentes (x,y),  y si es así, conseguir el puntero a la misma (si hay varias, la primera de la lista)
-Coor * searchTag(List * l, char * tag[]);//preguntar si una coordenada está en la lista pasando su etiqueta, y si es así, conseguir el puntero a la misma (si hay varias, la primera de la lista)
+Coor * searchTag(List * l, char tag[]);//preguntar si una coordenada está en la lista pasando su etiqueta, y si es así, conseguir el puntero a la misma (si hay varias, la primera de la lista)
 void erase(List * l, Coor * c);//eliminar una coordenada de la lista pasando su puntero
 
 void debugPrintList(List * l);
+void printList(List *l);

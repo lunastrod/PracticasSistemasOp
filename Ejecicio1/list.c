@@ -115,6 +115,17 @@ void debugPrintList(List * l){
   printf("NULL\n");
 }
 
+void printList(List *l){
+  Node * n;
+
+  for(n = l->head; n!=NULL; n=n->next){
+    printf("%s:(%d,%d) ",n->data->tag,n->data->x,n->data->y);
+  }
+  printf("\n");
+
+}
+
+
 Coor * searchXY(List * l, int x, int y){
   Node * n;
 
@@ -126,11 +137,11 @@ Coor * searchXY(List * l, int x, int y){
   return NULL;
 }
 
-Coor * searchTag(List * l, char * tag[]){
+Coor * searchTag(List * l, char tag[]){
   Node * n;
 
   for(n = l->head; n!=NULL; n=n->next){
-    if(strcmp(*tag,(n->data->tag)))
+    if(strcmp(tag,(n->data->tag)))
       return n->data;
   }
   return NULL;

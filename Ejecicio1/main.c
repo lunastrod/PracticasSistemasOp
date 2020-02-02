@@ -25,11 +25,10 @@ main(int argc, char *argv[])
   c.x=1;
   c.tag[0]='a';
   addRight(l,&c);
-  debugPrintList(l);
+  printList(l);
 
-  Coor pff={0,0,"aola"};
-  erase(l,searchTag(l,&pff.tag));
-  debugPrintList(l);
+  erase(l,searchTag(l,"aola"));
+  printList(l);
 
   deleteList(l);
   exit(EXIT_SUCCESS);
