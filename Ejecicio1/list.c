@@ -151,6 +151,26 @@ void addRight(List * l, Coor * c){
   l->size++;
 }
 
+void push(Stack * s, Coor * c){
+  addLeft(s->list,c);
+}
+Coor pop(Stack * s){
+  Coor c;
+  c=*s->list->head->data;
+  deleteNode(s->list, s->list->head);
+  return c;
+}
+
+void enqueue(Queue * q, Coor * c){
+  addLeft(q->list,c);
+}
+Coor dequeue(Queue * q){
+  Coor c;
+  c=*q->list->tail->data;
+  deleteNode(q->list, q->list->tail);
+  return c;
+}
+
 Coor * searchXY(List * l, int x, int y){
   Node * n;
 
