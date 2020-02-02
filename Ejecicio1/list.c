@@ -15,6 +15,15 @@ struct List{
   Node * tail;
 };
 
+struct Stack{
+  List * list;
+};
+
+struct Queue{
+  List * list;
+};
+
+//new, delete
 Node * newNode(Coor * c){
   static Node * n;
 
@@ -27,7 +36,6 @@ Node * newNode(Coor * c){
 
   return n;
 }
-
 void deleteNode(List * l, Node * n){
   //me aseguro de que la lista sigue conectada antes de borrar un nodo
   if(n!=l->head && n!=l->tail){//eliminar un nodo central
@@ -61,7 +69,6 @@ List * newList(){
   l->size=0;
   return l;
 }
-
 void deleteList(List * l){
   Node * n;
 
@@ -71,6 +78,45 @@ void deleteList(List * l){
   free(l);
 }
 
+Stack * newStack(){
+  static Stack * s;
+  s->list=newList();
+  return s;
+}
+void deleteStack(Stack * s){
+  deleteList(s->list);
+}
+
+Queue * newQueue(){
+  static Queue * q;
+  q->list=newList();
+  return q;
+}
+void deleteQueue(Queue * q){
+  deleteList(q->list);
+}
+
+//print
+void debugPrintList(List * l){
+  Node * n;
+
+  printf("NULL<->");
+  for(n = l->head; n!=NULL; n=n->next){
+    printf(" %d <->",n->data->x);
+  }
+  printf("NULL\n");
+}
+void printList(List *l){
+  Node * n;
+
+  for(n = l->head; n!=NULL; n=n->next){
+    printf("%s:(%d,%d) ",n->data->tag,n->data->x,n->data->y);
+  }
+  printf("\n");
+
+}
+
+//list
 int isEmpty(List * l){return l->size==0;}
 int size(List * l){return l->size;}
 Coor * first(List * l){return l->head->data;}
@@ -105,27 +151,6 @@ void addRight(List * l, Coor * c){
   l->size++;
 }
 
-void debugPrintList(List * l){
-  Node * n;
-
-  printf("NULL<->");
-  for(n = l->head; n!=NULL; n=n->next){
-    printf(" %d <->",n->data->x);
-  }
-  printf("NULL\n");
-}
-
-void printList(List *l){
-  Node * n;
-
-  for(n = l->head; n!=NULL; n=n->next){
-    printf("%s:(%d,%d) ",n->data->tag,n->data->x,n->data->y);
-  }
-  printf("\n");
-
-}
-
-
 Coor * searchXY(List * l, int x, int y){
   Node * n;
 
@@ -136,7 +161,6 @@ Coor * searchXY(List * l, int x, int y){
   }
   return NULL;
 }
-
 Coor * searchTag(List * l, char tag[]){
   Node * n;
 
@@ -157,3 +181,5 @@ void erase(List * l, Coor * c){
   //ahora n es el nodo que contiene c
   if(n!=NULL) deleteNode(l, n);
 }
+
+//Stack
