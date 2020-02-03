@@ -54,4 +54,6 @@ int main(int argc, char *argv[]){
   deleteList(l);//destruyo la lista, pila y cola
   deleteStack(s);
   deleteQueue(q);
+  
+  exit(EXIT_SUCCESS);
 }
