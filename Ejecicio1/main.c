@@ -27,7 +27,7 @@ int main(int argc, char *argv[]){
   printf("queue: ");
   printQueue(q);
 
-  for(a=0; a<=listSize; a+=2){//quito los impares de la lista
+  for(a=0; a<=listSize; a+=2){//quito los pares de la lista
     erase(l,searchXY(l,a,a));
   }
   printf("\nodds:      ");
@@ -54,6 +54,6 @@ int main(int argc, char *argv[]){
   deleteList(l);//destruyo la lista, pila y cola
   deleteStack(s);
   deleteQueue(q);
-  
+
   exit(EXIT_SUCCESS);
 }
