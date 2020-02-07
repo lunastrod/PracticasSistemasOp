@@ -24,15 +24,30 @@ struct Queue{
   List * list;
 };
 
-Node * newNode(Coor c){
+Coor * newCoor(int x, int y, char * tag){
+  static Coor * c;
+  c = malloc(sizeof(Coor));
+  c->x=x;
+  c->y=y;
+  snprintf(c->tag,tagSize,"%s",tag);
+  return c;
+}
+
+void deletecoor(Coor * c){
+
+
+}
+void printcoor(Coor * c){
+  printf("%s(%d,%d) ",c->tag,c->x,c->y);
+}
+
+Node * newNode(Coor * c){
   static Node * n;
 
   n = malloc(sizeof(Node));
   n->next=NULL;
   n->prev=NULL;
-
-  n->data = malloc(sizeof(Coor));
-  *(n->data) = c;//copio la coordenada c en el nuevo espacio de memoria del heap
+  n->data =c;
 
   return n;
 }
@@ -85,9 +100,8 @@ void deleteList(List * l){
 }
 void printList(List *l){
   Node * n;
-
   for(n = l->head; n!=NULL; n=n->next){
-    printf("%s(%d,%d) ",n->data->tag,n->data->x,n->data->y);
+    printcoor(n->data);
   }
   printf("\n");
 }
@@ -97,7 +111,7 @@ int size(List * l){return l->size;}
 Coor * first(List * l){return l->head->data;}
 Coor * last(List * l){return l->tail->data;}
 
-void addStart(List * l, Coor c){
+void addStart(List * l, Coor * c){
   Node * n = newNode(c);
   switch (l->size) {
     case 0:
@@ -111,7 +125,7 @@ void addStart(List * l, Coor c){
   }
   l->size++;
 }
-void addEnd(List * l, Coor c){
+void addEnd(List * l, Coor * c){
   Node * n = newNode(c);
   switch (l->size) {
     case 0:
@@ -178,12 +192,12 @@ void printStack(Stack * s){
   printList(s->list);
 }
 
-void push(Stack * s, Coor c){
+void push(Stack * s, Coor * c){
   addEnd(s->list,c);
 }
-Coor pop(Stack * s){
-  Coor c;
-  c=*s->list->tail->data;
+Coor * pop(Stack * s){
+  Coor * c;
+  c=s->list->tail->data;
   deleteNode(s->list, s->list->tail);
   return c;
 }
@@ -209,12 +223,12 @@ void printQueue(Queue * q){
   printList(q->list);
 }
 
-void enqueue(Queue * q, Coor c){
+void enqueue(Queue * q, Coor * c){
   addEnd(q->list,c);
 }
-Coor dequeue(Queue * q){
-  Coor c;
-  c=*q->list->head->data;
+Coor * dequeue(Queue * q){
+  Coor * c;
+  c=q->list->head->data;
   deleteNode(q->list, q->list->head);
   return c;
 }

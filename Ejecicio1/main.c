@@ -7,15 +7,14 @@ enum{
 };
 
 int main(int argc, char *argv[]){
-  Coor c={0,0,""};
+  Coor * c;
   int a;
   List * l = newList();//creo lista, pila y cola
   Stack * s= newStack();
   Queue * q= newQueue();
 
   for(a=0; a<=listSize; a++){//las lleno de coordenadas ascendentes
-    c.x=a;
-    c.y=a;
+    c=newCoor(a,a,"");
     addEnd(l,c);
     push(s,c);
     enqueue(q,c);
@@ -35,12 +34,12 @@ int main(int argc, char *argv[]){
   printf("reverse:   ");
   for(a=0; a<=listSize; a++){//imprimo en sentido inverso la pila
     c=pop(s);
-    printf("%s(%d,%d) ",c.tag,c.x,c.y);
+    printcoor(c);
   }
   printf("\nascending: ");
   for(a=0; a<=listSize; a++){//imprimo en orden ascendente la cola
     c=dequeue(q);
-    printf("%s(%d,%d) ",c.tag,c.x,c.y);
+    printf("%s(%d,%d) ",c->tag,c->x,c->y);
   }
   printf("\n\n");
 
