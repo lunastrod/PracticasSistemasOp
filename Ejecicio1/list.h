@@ -9,20 +9,13 @@ struct Coor{
   char tag[tagSize];
 };
 
-typedef struct Node Node;
-struct Node;
-
 typedef struct List List;
-struct List;
-
 typedef struct Stack Stack;
-struct Stack;
-
 typedef struct Queue Queue;
-struct Queue;
 
 
 
+Coor * newCoor(void);
 
 
 List * newList(void);
@@ -34,8 +27,8 @@ int size(List * l);//preguntar el número de elementos de la lista
 Coor * first(List * l);//determinar el primer elemento (o la "cabeza") de una lista
 Coor * last(List * l);//determinar el último elemento (o la "cola") de una lista
 
-void addLeft(List * l, Coor c);//agregar una entidad al inicio de una lista
-void addRight(List * l, Coor c);//agregar una entidad al final de una lista
+void addStart(List * l, Coor c);//agregar una entidad al inicio de una lista
+void addEnd(List * l, Coor c);//agregar una entidad al final de una lista
 
 Coor * searchXY(List * l, int x, int y);//preguntar si una coordenada está en la lista pasando sus dos componentes (x,y),  y si es así, conseguir el puntero a la misma (si hay varias, la primera de la lista)
 Coor * searchTag(List * l, char tag[]);//preguntar si una coordenada está en la lista pasando su etiqueta, y si es así, conseguir el puntero a la misma (si hay varias, la primera de la lista)

@@ -3,16 +3,27 @@
 #include "list.h"
 #include <string.h>
 
+typedef struct Node Node;
 struct Node{
   Coor * data;
   Node * next;
   Node * prev;
 };
+
 struct List{
   int size;
   Node * head;
   Node * tail;
 };
+
+struct Stack{
+  List * list;
+};
+
+struct Queue{
+  List * list;
+};
+
 Node * newNode(Coor c){
   static Node * n;
 
@@ -68,7 +79,7 @@ void deleteList(List * l){
   Node * n;
 
   for(n = l->head; n!=NULL; n=n->next){
-    deleteNode(l, n);
+    deleteNode(l, n);//TODO: estoy haciendo un free y despues accediendo a n en n=n->next
   }
   free(l);
 }
@@ -86,7 +97,7 @@ int size(List * l){return l->size;}
 Coor * first(List * l){return l->head->data;}
 Coor * last(List * l){return l->tail->data;}
 
-void addLeft(List * l, Coor c){
+void addStart(List * l, Coor c){
   Node * n = newNode(c);
   switch (l->size) {
     case 0:
@@ -100,7 +111,7 @@ void addLeft(List * l, Coor c){
   }
   l->size++;
 }
-void addRight(List * l, Coor c){
+void addEnd(List * l, Coor c){
   Node * n = newNode(c);
   switch (l->size) {
     case 0:
@@ -150,9 +161,7 @@ void erase(List * l, Coor * c){
 
 
 
-struct Stack{
-  List * list;
-};
+
 
 Stack * newStack(){
   static Stack * s;
@@ -170,7 +179,7 @@ void printStack(Stack * s){
 }
 
 void push(Stack * s, Coor c){
-  addRight(s->list,c);
+  addEnd(s->list,c);
 }
 Coor pop(Stack * s){
   Coor c;
@@ -183,9 +192,7 @@ Coor pop(Stack * s){
 
 
 
-struct Queue{
-  List * list;
-};
+
 
 Queue * newQueue(){
   static Queue * q;
@@ -203,7 +210,7 @@ void printQueue(Queue * q){
 }
 
 void enqueue(Queue * q, Coor c){
-  addRight(q->list,c);
+  addEnd(q->list,c);
 }
 Coor dequeue(Queue * q){
   Coor c;

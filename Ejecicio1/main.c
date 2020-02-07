@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
   for(a=0; a<=listSize; a++){//las lleno de coordenadas ascendentes
     c.x=a;
     c.y=a;
-    addRight(l,c);
+    addEnd(l,c);
     push(s,c);
     enqueue(q,c);
   }
