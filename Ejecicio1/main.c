@@ -9,50 +9,50 @@ enum{
 int main(int argc, char *argv[]){
   Coor * c;
   int a;
-  List * l = newList();//creo lista, pila y cola
-  Stack * s= newStack();
-  Queue * q= newQueue();
+  List * l = newlist();//creo lista, pila y cola
+  Stack * s= newstack();
+  Queue * q= newqueue();
 
   for(a=0; a<=listSize; a++){//las lleno de coordenadas ascendentes
-    c=newCoor(a,a,"");
-    addEnd(l,c);
-    push(s,c);
-    enqueue(q,c);
+    addendlist(l,newcoor(a,a,""));
+    push(s,newcoor(a,a,""));
+    enqueue(q,newcoor(a,a,""));
   }
   printf("list:  ");
-  printList(l);
+  printlist(l);
   printf("stack: ");
-  printStack(s);
+  printstack(s);
   printf("queue: ");
-  printQueue(q);
+  printqueue(q);
 
   for(a=0; a<=listSize; a+=2){//quito los pares de la lista
-    erase(l,searchXY(l,a,a));
+    erasecoor(l,searchxy(l,a,a));
   }
   printf("\nodds:      ");
-  printList(l);
+  printlist(l);
   printf("reverse:   ");
   for(a=0; a<=listSize; a++){//imprimo en sentido inverso la pila
     c=pop(s);
     printcoor(c);
+    deletecoor(c);
   }
   printf("\nascending: ");
   for(a=0; a<=listSize; a++){//imprimo en orden ascendente la cola
     c=dequeue(q);
-    printf("%s(%d,%d) ",c->tag,c->x,c->y);
+    printcoor(c);
+    deletecoor(c);
   }
   printf("\n\n");
 
   printf("list:  ");
-  printList(l);
+  printlist(l);
   printf("stack: ");
-  printStack(s);
+  printstack(s);
   printf("queue: ");
-  printQueue(q);
+  printqueue(q);
 
-  deleteList(l);//destruyo la lista, pila y cola
-  deleteStack(s);
-  deleteQueue(q);
-
+  deletelist(l);//destruyo la lista, pila y cola
+  deletestack(s);
+  deletequeue(q);
   exit(EXIT_SUCCESS);
 }

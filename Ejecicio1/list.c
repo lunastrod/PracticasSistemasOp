@@ -24,7 +24,7 @@ struct Queue{
   List * list;
 };
 
-Coor * newCoor(int x, int y, char * tag){
+Coor * newcoor(int x, int y, char * tag){
   static Coor * c;
   c = malloc(sizeof(Coor));
   c->x=x;
@@ -34,14 +34,13 @@ Coor * newCoor(int x, int y, char * tag){
 }
 
 void deletecoor(Coor * c){
-
-
+  free(c);
 }
 void printcoor(Coor * c){
   printf("%s(%d,%d) ",c->tag,c->x,c->y);
 }
 
-Node * newNode(Coor * c){
+Node * newnode(Coor * c){
   static Node * n;
 
   n = malloc(sizeof(Node));
@@ -51,7 +50,7 @@ Node * newNode(Coor * c){
 
   return n;
 }
-void deleteNode(List * l, Node * n){
+void deletenode(List * l, Node * n){
   //me aseguro de que la lista sigue conectada antes de borrar un nodo
   if(n!=l->head && n!=l->tail){//eliminar un nodo central
     n->prev->next=n->next;
@@ -72,7 +71,6 @@ void deleteNode(List * l, Node * n){
     l->tail=NULL;
   }
   l->size--;
-  free(n->data);
   free(n);
 }
 
@@ -82,75 +80,78 @@ void deleteNode(List * l, Node * n){
 
 
 
-List * newList(){
+List * newlist(){
   static List * l;
 
   l = malloc(sizeof(List));
-  //TODO: if(l==NULL){} //por si no tiene memoria
   l->size=0;
   return l;
 }
-void deleteList(List * l){
+void deletelist(List * l){
   Node * n;
+  Node * next;
 
-  for(n = l->head; n!=NULL; n=n->next){
-    deleteNode(l, n);//TODO: estoy haciendo un free y despues accediendo a n en n=n->next
+  for(n = l->head; n!=NULL; n=next){
+    next=n->next;
+    deletecoor(n->data);
+    deletenode(l, n);
   }
   free(l);
 }
-void printList(List *l){
+void printlist(List *l){
   Node * n;
+  if(isempty(l)){
+    printf("*EMPTY*\n");
+    return;
+  }
   for(n = l->head; n!=NULL; n=n->next){
     printcoor(n->data);
   }
   printf("\n");
 }
 
-int isEmpty(List * l){return l->size==0;}
+int isempty(List * l){return l->size==0;}
 int size(List * l){return l->size;}
 Coor * first(List * l){return l->head->data;}
 Coor * last(List * l){return l->tail->data;}
 
-void addStart(List * l, Coor * c){
-  Node * n = newNode(c);
-  switch (l->size) {
-    case 0:
-      l->head=n;
-      l->tail=n;
-      break;
-    default:
-      n->next=l->head;
-      l->head->prev=n;
-      l->head=n;
+void addstartlist(List * l, Coor * c){
+  Node * n = newnode(c);
+  if(isempty(l)){
+    l->head=n;
+    l->tail=n;
+  }
+  else{
+    n->next=l->head;
+    l->head->prev=n;
+    l->head=n;
   }
   l->size++;
 }
-void addEnd(List * l, Coor * c){
-  Node * n = newNode(c);
-  switch (l->size) {
-    case 0:
-      l->head=n;
-      l->tail=n;
-      break;
-    default:
-      n->prev=l->tail;
-      l->tail->next=n;
-      l->tail=n;
+void addendlist(List * l, Coor * c){
+  Node * n = newnode(c);
+  if(isempty(l)){
+    l->head=n;
+    l->tail=n;
+  }
+  else{
+    n->prev=l->tail;
+    l->tail->next=n;
+    l->tail=n;
   }
   l->size++;
 }
 
-Coor * searchXY(List * l, int x, int y){
+Coor * searchxy(List * l, int x, int y){
   Node * n;
 
   for(n = l->head; n!=NULL; n=n->next){
-    //fprintf(stderr, "%d-%d, %d-%d\n", n->data->y,x,n->data->x,y);
     if(n->data->x==x && n->data->y==y)
       return n->data;
   }
   return NULL;
 }
-Coor * searchTag(List * l, char tag[]){
+Coor * searchtag(List * l, char tag[]){
   Node * n;
 
   for(n = l->head; n!=NULL; n=n->next){
@@ -160,7 +161,7 @@ Coor * searchTag(List * l, char tag[]){
   return NULL;
 }
 
-void erase(List * l, Coor * c){
+void erasecoor(List * l, Coor * c){
   Node * n;
   //busco el nodo en el que está c
   for(n = l->head; n!=NULL; n=n->next){
@@ -168,7 +169,10 @@ void erase(List * l, Coor * c){
       break;//cuando lo encuentres deja de buscar
   }
   //ahora n es el nodo que contiene c
-  if(n!=NULL) deleteNode(l, n);
+  if(n!=NULL){
+    deletecoor(n->data);
+    deletenode(l, n);
+  }
 }
 
 
@@ -177,28 +181,28 @@ void erase(List * l, Coor * c){
 
 
 
-Stack * newStack(){
+Stack * newstack(){
   static Stack * s;
   s = malloc(sizeof(Stack));
-  s->list=newList();
+  s->list=newlist();
   return s;
 }
-void deleteStack(Stack * s){
-  deleteList(s->list);
+void deletestack(Stack * s){
+  deletelist(s->list);
   free(s);
 }
 
-void printStack(Stack * s){
-  printList(s->list);
+void printstack(Stack * s){
+  printlist(s->list);
 }
 
 void push(Stack * s, Coor * c){
-  addEnd(s->list,c);
+  addendlist(s->list,c);
 }
 Coor * pop(Stack * s){
   Coor * c;
   c=s->list->tail->data;
-  deleteNode(s->list, s->list->tail);
+  deletenode(s->list, s->list->tail);
   return c;
 }
 
@@ -208,27 +212,27 @@ Coor * pop(Stack * s){
 
 
 
-Queue * newQueue(){
+Queue * newqueue(){
   static Queue * q;
   q = malloc(sizeof(Queue));
-  q->list=newList();
+  q->list=newlist();
   return q;
 }
-void deleteQueue(Queue * q){
-  deleteList(q->list);
+void deletequeue(Queue * q){
+  deletelist(q->list);
   free(q);
 }
 
-void printQueue(Queue * q){
-  printList(q->list);
+void printqueue(Queue * q){
+  printlist(q->list);
 }
 
 void enqueue(Queue * q, Coor * c){
-  addEnd(q->list,c);
+  addendlist(q->list,c);
 }
 Coor * dequeue(Queue * q){
   Coor * c;
   c=q->list->head->data;
-  deleteNode(q->list, q->list->head);
+  deletenode(q->list, q->list->head);
   return c;
 }
