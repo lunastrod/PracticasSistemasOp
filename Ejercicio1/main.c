@@ -5,7 +5,7 @@
 enum{
   listSize=10
 };
-
+///*
 int main(int argc, char *argv[]){
   Coor * c;
   int a;
@@ -56,3 +56,31 @@ int main(int argc, char *argv[]){
   deletequeue(q);
   exit(EXIT_SUCCESS);
 }
+//*/
+/*
+//main para comprobar los posibles errores
+int main(int argc, char *argv[]){
+  List * l = newlist();
+  Stack * s= newstack();
+  Queue * q= newqueue();
+  Coor * c = newcoor(12,37,"test");
+
+  //printcoor(NULL);//stderr: can't print a NULL pointer to coor
+
+  //firstcoor(l);//stderr: empty list, no first element
+  //lastcoor(l);//stderr: empty list, no last element
+
+  //no dan error, es tu problema si metes null en un nodo
+  //addstartlist(l, NULL);
+  //addendlist(l, NULL);
+  //push(s, NULL);
+  //enqueue(q, NULL);
+
+  //searchxy(l,1,1);//stderr: no coor in list with members (x,y)=(1,1)
+  //searchtag(l,"noexiste");//stderr: no coor in list with members tag=noexiste
+  //erasecoor(l,searchtag(l,"noexiste"));//stderr: no coor in list with adress= (nil)
+
+  //pop(s);//stderr: empty stack, can't pop
+  //dequeue(q);//stderr: empty queue, can't dequeue
+}
+*/

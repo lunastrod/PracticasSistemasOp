@@ -1,0 +1,4 @@
+cd github/PracticasSistemasOp/Ejercicio
+
+**memory leaks**
+valgrind ./programa arg1 arg2

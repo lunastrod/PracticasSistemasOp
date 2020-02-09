@@ -24,8 +24,8 @@ void printlist(List *l);
 
 int isempty(List * l);//preguntar si una lista está vacía
 int size(List * l);//preguntar el número de elementos de la lista
-Coor * first(List * l);//determinar el primer elemento (o la "cabeza") de una lista
-Coor * last(List * l);//determinar el último elemento (o la "cola") de una lista
+Coor * firstcoor(List * l);//determinar el primer elemento (o la "cabeza") de una lista
+Coor * lastcoor(List * l);//determinar el último elemento (o la "cola") de una lista
 
 void addstartlist(List * l, Coor * c);//agregar una entidad al inicio de una lista
 void addendlist(List * l, Coor * c);//agregar una entidad al final de una lista

@@ -34,9 +34,13 @@ Coor * newcoor(int x, int y, char * tag){
 }
 
 void deletecoor(Coor * c){
-  free(c);
+  if(c!=NULL) free(c);
 }
 void printcoor(Coor * c){
+  if(c==NULL){
+    fprintf(stderr, "%s\n", "can't print a NULL pointer to coor");
+    return;
+  }
   printf("%s(%d,%d) ",c->tag,c->x,c->y);
 }
 
@@ -101,7 +105,8 @@ void deletelist(List * l){
 void printlist(List *l){
   Node * n;
   if(isempty(l)){
-    printf("*EMPTY*\n");
+    //por stdout para que no salga desordenado
+    fprintf(stdout, "%s\n", "empty");
     return;
   }
   for(n = l->head; n!=NULL; n=n->next){
@@ -112,8 +117,20 @@ void printlist(List *l){
 
 int isempty(List * l){return l->size==0;}
 int size(List * l){return l->size;}
-Coor * first(List * l){return l->head->data;}
-Coor * last(List * l){return l->tail->data;}
+Coor * firstcoor(List * l){
+  if(isempty(l)){
+    fprintf(stderr, "%s\n", "empty list, no first element");
+    return NULL;
+  }
+  return l->head->data;
+}
+Coor * lastcoor(List * l){
+  if(isempty(l)){
+    fprintf(stderr, "%s\n", "empty list, no last element");
+    return NULL;
+  }
+  return l->tail->data;
+}
 
 void addstartlist(List * l, Coor * c){
   Node * n = newnode(c);
@@ -149,15 +166,17 @@ Coor * searchxy(List * l, int x, int y){
     if(n->data->x==x && n->data->y==y)
       return n->data;
   }
+  fprintf(stderr, "%s(%d,%d)\n", "no coor in list with members (x,y)=",x,y);
   return NULL;
 }
-Coor * searchtag(List * l, char tag[]){
+Coor * searchtag(List * l, char * tag){
   Node * n;
 
   for(n = l->head; n!=NULL; n=n->next){
     if(strcmp(tag,(n->data->tag))==0)//si son iguales
       return n->data;
   }
+  fprintf(stderr, "%s%s\n", "no coor in list with members tag=",tag);
   return NULL;
 }
 
@@ -168,16 +187,14 @@ void erasecoor(List * l, Coor * c){
     if(n->data==c)
       break;//cuando lo encuentres deja de buscar
   }
-  //ahora n es el nodo que contiene c
-  if(n!=NULL){
-    deletecoor(n->data);
-    deletenode(l, n);
+  if(n==NULL){
+    fprintf(stderr, "%s%p\n", "no coor in list with adress= ",c);
+    return;
   }
+  //ahora n es el nodo que contiene c
+  deletecoor(n->data);
+  deletenode(l, n);
 }
-
-
-
-
 
 
 
@@ -201,15 +218,14 @@ void push(Stack * s, Coor * c){
 }
 Coor * pop(Stack * s){
   Coor * c;
+  if(isempty(s->list)){
+    fprintf(stderr, "%s\n", "empty stack, can't pop");
+    return NULL;
+  }
   c=s->list->tail->data;
   deletenode(s->list, s->list->tail);
   return c;
 }
-
-
-
-
-
 
 
 Queue * newqueue(){
@@ -232,6 +248,10 @@ void enqueue(Queue * q, Coor * c){
 }
 Coor * dequeue(Queue * q){
   Coor * c;
+  if(isempty(q->list)){
+    fprintf(stderr, "%s\n", "empty queue, can't dequeue");
+    return NULL;
+  }
   c=q->list->head->data;
   deletenode(q->list, q->list->head);
   return c;
