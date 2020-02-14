@@ -36,6 +36,12 @@ ya esta
 $>
 */
 
+enum{
+  FALSE,
+  TRUE,
+  CAPITALIZE='A'-'a'
+};
+
 void argverror() {
   fprintf(stderr, "execargs secs command [command ...]\n");
   exit(EXIT_FAILURE);
@@ -62,9 +68,20 @@ int main(int argc, char *argv[]){
     argverror();
   }
   secs = parseint(argv[1]);//might call argverror() if not parsable
+  char * command=malloc((strlen(argv[2])+1)*sizeof(char));
+  char ** command_args=malloc((strlen(argv[2])+1)*sizeof(char));
+  strtok_r(argv[2]," ",command_args);
+  printf("command=%s command_args=%s\n",argv[2],*command_args);
   for(i=2; i<argc; i++){
-    printf("arg=%s\n",argv[i]);
-    sleep(secs);
+    switch (fork()){
+      case 0:
+        execl("echo","a","hola",NULL);
+        fprintf(stderr, "hola soy el hijo\n");
+        argverror();//TODO: si el hijo llega aquí, matar al padre también
+      default:
+        sleep(secs);
+        fprintf(stderr, "hola soy el padre \n" );
+    }
   }
   exit(EXIT_SUCCESS);
 }
