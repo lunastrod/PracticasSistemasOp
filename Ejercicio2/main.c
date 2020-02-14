@@ -2,48 +2,65 @@
 #include <stdio.h>
 #include <string.h>
 
-void lowercase(char * str){
-  for(int i=0; str[i]!='\0'; i++){
-    if(str[i]>='A'&&str[i]<='Z'){//if uppercase
-      str[i]=str[i]+('a'-'A');//lowercase(char);
-    }
-  }
-}
+enum{
+  FALSE,
+  TRUE,
+  CAPITALIZE='A'-'a'
+};
 
 void uppercase(char * str){
   for(int i=0; str[i]!='\0'; i++){
-    if(str[i]>='a'&&str[i]<='z'){//if lowercase
-      str[i]=str[i]-('a'-'A');//uppercase(char);
+    if(str[i]>='a'&&str[i]<='z'){
+      str[i]=str[i]+CAPITALIZE;
     }
   }
 }
 
-int printvar(char * vararg, int size){
+void lowercase(char * str){
+  for(int i=0; str[i]!='\0'; i++){
+    if(str[i]>='A'&&str[i]<='Z'){
+      str[i]=str[i]-CAPITALIZE;
+    }
+  }
+}
+
+int printvar_case_sensitive(char * namevar){
+  //if the variable exists prints it and returns true
+  //warning: case sensitive
+  char * value;
+  value=getenv(namevar);
+  if(value!=NULL){
+    printf("%s: %s\n",namevar,value);
+    return TRUE;
+  }
+  return FALSE;
+}
+
+int printvar(char * namevar_input, int size){
+  //if the variable exists prints it and returns true
   char * var;
-  char * result;
 
-  var=malloc(size*sizeof(char));
-  strncpy(var, vararg, size);
+  var=malloc((size+1)*sizeof(char));
+  strncpy(var, namevar_input, size);
 
-  result=getenv(var);
-
-  if(result!=NULL){
-    printf("%s: %s\n",var,result);
-    return 1;
+  if (printvar_case_sensitive(var)){
+    free(var);
+    return TRUE;
   }
+
   lowercase(var);
-  result=getenv(var);
-  if(result!=NULL){
-    printf("%s: %s\n",var,result);
-    return 1;
+  if (printvar_case_sensitive(var)){
+    free(var);
+    return TRUE;
   }
+
   uppercase(var);
-  result=getenv(var);
-  if(result!=NULL){
-    printf("%s: %s\n",var,result);
-    return 1;
+  if (printvar_case_sensitive(var)){
+    free(var);
+    return TRUE;
   }
-  fprintf(stderr, "error, la variable '%s' no existe\n",vararg);
+
+  fprintf(stderr, "error, la variable '%s' no existe\n",namevar_input);
   free(var);
   return 0;
 }
@@ -53,10 +70,11 @@ int main(int argc, char *argv[]){
   int exitcode=EXIT_SUCCESS;
   if(argc==1){
     fprintf(stderr, "usage: printvars name [name ...]\n");
-    int exitcode=EXIT_FAILURE;
+    exit(EXIT_FAILURE);
   }
   for(i=1; i<argc; i++){
-    if(!printvar(argv[i],strlen(argv[i]))) exitcode=EXIT_FAILURE;
+    if(!printvar(argv[i],strlen(argv[i])))
+      exitcode=EXIT_FAILURE;
   }
-  return exitcode;
+  exit(exitcode);
 }
