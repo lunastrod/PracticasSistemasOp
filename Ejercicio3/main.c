@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <string.h>
 
 /*
 Escriba un programa en C llamado execargs que ejecute todos los comandos que se le pasen como argumentos.
@@ -34,17 +36,35 @@ ya esta
 $>
 */
 
-void exiterror()
+void argverror() {
+  fprintf(stderr, "execargs secs command [command ...]\n");
+  exit(EXIT_FAILURE);
+}
+
+int parseint(char * str){
+  char ** not_parsable_substring=malloc((strlen(str)+1)*sizeof(char));
+  int n=strtol(str,not_parsable_substring,10);
+  if(strlen(*not_parsable_substring)>0){//strtol hasnt finished parsing
+    //str is not parsable to int
+    fprintf(stderr, "not_parsable_substring=%s\n", *not_parsable_substring);
+    free(not_parsable_substring);
+    argverror();
+  }
+  free(not_parsable_substring);
+  //printf("n=%d\n",n);
+  return n;
+}
 
 int main(int argc, char *argv[]){
+  int i;
+  int secs;
   if(argc<=2){
-    fprintf(stderr, "execargs secs command [command ...]\n");
-    exit(EXIT_FAILURE);
+    argverror();
   }
-  char lastchar=malloc(argv[1])
-  int i=strtol(argv[1],,10);
-  printf("%s")
-
-
-
+  secs = parseint(argv[1]);//might call argverror() if not parsable
+  for(i=2; i<argc; i++){
+    printf("arg=%s\n",argv[i]);
+    sleep(secs);
+  }
+  exit(EXIT_SUCCESS);
 }
