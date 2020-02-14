@@ -24,7 +24,9 @@ int printvar(char * vararg, int size){
 
   var=malloc(size*sizeof(char));
   strncpy(var, vararg, size);
+
   result=getenv(var);
+
   if(result!=NULL){
     printf("%s: %s\n",var,result);
     return 1;
@@ -41,7 +43,7 @@ int printvar(char * vararg, int size){
     printf("%s: %s\n",var,result);
     return 1;
   }
-  printf("error, la variable '%s' no existe\n",vararg);
+  fprintf(stderr, "error, la variable '%s' no existe\n",vararg);
   free(var);
   return 0;
 }
@@ -50,7 +52,7 @@ int main(int argc, char *argv[]){
   int i;
   int exitcode=EXIT_SUCCESS;
   if(argc==1){
-    printf("usage: printvars name [name ...]\n");
+    fprintf(stderr, "usage: printvars name [name ...]\n");
     int exitcode=EXIT_FAILURE;
   }
   for(i=1; i<argc; i++){
