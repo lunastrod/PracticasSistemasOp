@@ -5,13 +5,12 @@
 enum{
   FALSE,
   TRUE,
-  CAPITALIZE='A'-'a'
 };
 
 void uppercase(char * str){
   for(int i=0; str[i]!='\0'; i++){
     if(str[i]>='a'&&str[i]<='z'){
-      str[i]=str[i]+CAPITALIZE;
+      str[i]=str[i]+('A'-'a');
     }
   }
 }
@@ -19,7 +18,7 @@ void uppercase(char * str){
 void lowercase(char * str){
   for(int i=0; str[i]!='\0'; i++){
     if(str[i]>='A'&&str[i]<='Z'){
-      str[i]=str[i]-CAPITALIZE;
+      str[i]=str[i]-('A'-'a');
     }
   }
 }
@@ -62,7 +61,7 @@ int printvar(char * namevar_input, int size){
 
   fprintf(stderr, "error, la variable '%s' no existe\n",namevar_input);
   free(var);
-  return 0;
+  return FALSE;
 }
 
 int main(int argc, char *argv[]){
