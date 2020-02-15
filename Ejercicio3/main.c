@@ -1,11 +1,14 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include <unistd.h>
+
+#include <sys/types.h>
+#include <sys/wait.h>
+
+#include <stdio.h>
 #include <string.h>
 
 /*
 TODO: rutas??? El resto de argumentos que se le pasan al programa serán rutas de ejecutables,
-TODO: cómo??? En caso de error, se debe avisar como corresponda y acabar la ejecución (no se deben ejecutar los programas restantes).
 
 TODO: no sería /bin/echo???
 $> ./execargs 1 /bin/ls 'echo ya esta'
@@ -57,6 +60,7 @@ int parseint(char * input){
 int main(int argc, char * argv[]){
   int i;
   int secs;
+  int exit_code;
   if(argc<=2){
     argverror();
   }
@@ -66,6 +70,9 @@ int main(int argc, char * argv[]){
     if(fork() == 0){
       exec_command(argv[i]);
       argverror();//TODO: si el hijo llega aquí, matar al padre también
+    }
+    if(wait(&exit_code)!=-1 && WEXITSTATUS(exit_code)==EXIT_FAILURE){
+      exit(EXIT_FAILURE);
     }
     sleep(secs);
   }
