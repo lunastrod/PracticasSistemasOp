@@ -39,12 +39,32 @@ $>
 enum{
   FALSE,
   TRUE,
-  CAPITALIZE='A'-'a'
+  ARG_MAX=255//max number of arguments
 };
 
 void argverror() {
   fprintf(stderr, "execargs secs command [command ...]\n");
   exit(EXIT_FAILURE);
+}
+
+int exec_command(char * input){
+  //example: exec_command("/bin/echo a a a");
+  //will exec "/bin/echo" with 3 args: "a" "a" "a"
+  char * command;
+  char * args[ARG_MAX];
+  char * rest = input;
+  int i=1;
+
+  command = strtok_r(rest, " ", &rest);
+  args[0]=command;
+
+  //tokenizo input en args y añado un NULL al final de args
+  while ((args[i] = strtok_r(rest, " ", &rest))){
+    //printf("%s, i=%d\n", args[i],i);
+    i++;
+  }
+  args[i]=NULL;
+  return execv(command,args);
 }
 
 int parseint(char * str){
@@ -61,27 +81,20 @@ int parseint(char * str){
   return n;
 }
 
-int main(int argc, char *argv[]){
+int main(int argc, char * argv[]){
   int i;
   int secs;
   if(argc<=2){
     argverror();
   }
   secs = parseint(argv[1]);//might call argverror() if not parsable
-  char * command=malloc((strlen(argv[2])+1)*sizeof(char));
-  char ** command_args=malloc((strlen(argv[2])+1)*sizeof(char));
-  strtok_r(argv[2]," ",command_args);
-  printf("command=%s command_args=%s\n",argv[2],*command_args);
+
   for(i=2; i<argc; i++){
-    switch (fork()){
-      case 0:
-        execl("echo","a","hola",NULL);
-        fprintf(stderr, "hola soy el hijo\n");
-        argverror();//TODO: si el hijo llega aquí, matar al padre también
-      default:
-        sleep(secs);
-        fprintf(stderr, "hola soy el padre \n" );
+    if(fork() == 0){
+      exec_command(argv[i]);
+      argverror();//TODO: si el hijo llega aquí, matar al padre también
     }
+    sleep(secs);
   }
   exit(EXIT_SUCCESS);
 }
