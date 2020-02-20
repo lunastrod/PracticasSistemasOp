@@ -42,6 +42,8 @@ int parseint(char * input){
   char * rest = input;
   int n =strtol(rest,&rest,10);
 
+
+
   if(strlen(rest)>0){//strtol hasnt finished parsing
     fprintf(stderr, "'%s' %s\n", input, PARSEINT_ERROR);
     argverror();
