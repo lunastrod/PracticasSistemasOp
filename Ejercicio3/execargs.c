@@ -44,6 +44,7 @@ void exec_command(char ** input){
 }
 
 void execute(char * input){
+  //tokens input and calls exec_command()
   //example: exec_command("/bin/echo a a a");
   //will exec "/bin/echo" with 3 args: "a" "a" "a"
   char * rest = input;
