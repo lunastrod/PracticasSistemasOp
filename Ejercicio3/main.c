@@ -5,7 +5,7 @@
 #include <string.h>
 
 const char USAGE_ERROR[] =    "execargs secs command [command ...]";
-const char PARSEINT_ERROR[] = "is not an integer value";
+const char PARSEINT_ERROR[] = "is not a natural value";
 const char EXEC_ERROR[] =     "command not found";
 const char FORK_ERROR[] =     "can't fork";
 
@@ -18,7 +18,32 @@ void argverror() {
   exit(EXIT_FAILURE);
 }
 
-void exec_command(char * input){
+int parseint(char * input){
+  char * rest = input;
+  int n =strtol(rest,&rest,10);
+
+  if(strlen(rest)>0 || n<0){//strtol hasnt finished parsing or n is negative
+    fprintf(stderr, "'%s' %s\n", input, PARSEINT_ERROR);
+    argverror();
+  }
+  return n;
+}
+
+void exec_command(char ** input){
+  //example: exec_command({"/bin/echo", "a", "a", "a"});
+  //will exec "/bin/echo" with 3 args: "a" "a" "a"
+  switch(fork()){
+    case 0:
+      execv(input[0],input);
+      fprintf(stderr, "'%s' %s\n", input[0], EXEC_ERROR);
+      argverror();
+    case -1:
+      fprintf(stderr, "%s\n", FORK_ERROR);
+      argverror();
+  }
+}
+
+void execute(char * input){
   //example: exec_command("/bin/echo a a a");
   //will exec "/bin/echo" with 3 args: "a" "a" "a"
   char * rest = input;
@@ -33,22 +58,7 @@ void exec_command(char * input){
     i++;
   }
   args[i]=NULL;
-  execv(command,args);
-  fprintf(stderr, "'%s' %s\n", command, EXEC_ERROR);
-  argverror();
-}
-
-int parseint(char * input){
-  char * rest = input;
-  int n =strtol(rest,&rest,10);
-
-
-
-  if(strlen(rest)>0){//strtol hasnt finished parsing
-    fprintf(stderr, "'%s' %s\n", input, PARSEINT_ERROR);
-    argverror();
-  }
-  return n;
+  exec_command(args);
 }
 
 int main(int argc, char * argv[]){
@@ -60,13 +70,7 @@ int main(int argc, char * argv[]){
   secs = parseint(argv[1]);//calls argverror() if not parsable
 
   for(i=2; i<argc; i++){
-    switch(fork()){
-      case 0:
-        exec_command(argv[i]);//calls argverror() if error
-      case -1:
-        fprintf(stderr, "%s\n", FORK_ERROR);
-        argverror();
-    }
+    execute(argv[i]);
     sleep(secs);
   }
   exit(EXIT_SUCCESS);
