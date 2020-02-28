@@ -5,6 +5,9 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+enum{
+  MAX_ARGS=256
+};
 
 const char USAGE_ERROR[] = "usage: greper regexp path [regexp path ...]";
 const char EXEC_ERROR[]  = "exec error: grep command not found";
@@ -15,11 +18,11 @@ void printresult(int status, const char * regexp, const char * file){
     case 0:
       printf("%s matches '%s'\n", file, regexp);
       break;
-    case 1://TODO: por la salida de error?
+    case 1:
       printf("%s does not match '%s'\n", file, regexp);
       break;
-    case 2://TODO: por la salida de error?
-      printf("%s: ERROR\n", file);
+    case 2:
+      fprintf(stderr, "%s: ERROR\n", file);
       break;
   }
 }
@@ -28,8 +31,6 @@ int exec_grep(const char * regexp, const char * file){
   int pid=fork();
   switch(pid){
     case 0:
-      //grep -E(use regexp) -s(supress some stderr) -q(no stdout)
-      //TODO: ./greper a[] greper.c saca mensajes de grep (no está mal del todo)
       execl("/bin/grep","grep","-Esq",regexp,file,NULL);
       fprintf(stderr, "%s\n", EXEC_ERROR);
       exit(EXIT_FAILURE);
@@ -42,10 +43,10 @@ int exec_grep(const char * regexp, const char * file){
 
 int main(int argc, char * argv[]){
   int i;
-  int pids[(argc/2)];//the pids of all the future grep commands
+  int pids[(MAX_ARGS/2)];//the pids of all the future grep commands
   int status;
   int exitstatus=EXIT_SUCCESS;
-  if(argc<3 || argc%2==0){//argc can be:{3,5,7,9...}
+  if(argc<3 || argc%2==0 || argc>MAX_ARGS+1){//argc can be:{3,5,7,9...,MAX_ARGS+1}
     fprintf(stderr, "%s\n", USAGE_ERROR);
     exit(EXIT_FAILURE);
   }
