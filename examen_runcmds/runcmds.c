@@ -109,23 +109,19 @@ int exec_line(char * line){
 }
 
 int filter(char * regexp, char * input, FILE * fout){
-
   int p1[2];//pipe from here to grep
   if(pipe(p1) < 0){
     fprintf(stderr, "[%s]: %s\n", NAME, PIPE_ERROR);
     return FALSE;
   }
-  close(p1[0]);  // Close reading end of first pipe
-
-  //write(p1[1], input, strlen(input)+1);
+  close(p1[0]);  // Close reading end of pipe
 
   char * grep_args[]={"grep","-E","--text",regexp,NULL};
-
   pid_t grep_pid=exec_command("/bin/egrep",grep_args,p1[1],fileno(fout));//fileno(fout)
 
 
-  close(p1[1]);
-  fclose(fout);
+  //close(p1[1]);
+  //fclose(fout);
   wait_command(grep_pid);
 
   return TRUE;
