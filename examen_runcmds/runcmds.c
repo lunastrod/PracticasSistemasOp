@@ -57,12 +57,10 @@ pid_t exec_command(char * path, char ** args, int infd, int outfd){
   switch(child_pid){
     case 0:
       if(infd>=0){
-        printf("%d%d\n",infd,outfd);
         close(0);//Close stdin
         dup2(infd,0);
       }
       if(outfd>=0){
-        printf("%d%d\n",infd,outfd);
         close(1);//Close stdout
         dup2(outfd,1);
       }
@@ -83,7 +81,24 @@ int wait_command(pid_t pid){
   return status;
 }
 
-int exec_line(char * line){
+int filter(char * regexp, char * input, FILE * fout){
+  int p1[2];//pipe from here to grep
+  if(pipe(p1) < 0){
+    fprintf(stderr, "[%s]: %s\n", NAME, PIPE_ERROR);
+    return FALSE;
+  }
+  //writing in the pipe
+  write(p1[1], input, strlen(input));
+  close(p1[1]);
+
+  char * grep_args[]={"grep","-E","--text",regexp,NULL};
+  pid_t grep_pid=exec_command("/bin/egrep",grep_args,p1[0],fileno(fout));//fileno(fout)
+  wait_command(grep_pid);
+
+  return TRUE;
+}
+
+int exec_line(char * line, FILE * fout, FILE * ferr){
   char * name=malloc(MAX_LINE_LENGTH*sizeof(char));
   char * path=malloc(MAX_LINE_LENGTH*sizeof(char));
   char ** command=malloc(MAX_ARGS*sizeof(char*));
@@ -108,79 +123,77 @@ int exec_line(char * line){
   return TRUE;
 }
 
-int filter(char * regexp, char * input, FILE * fout){
-  int p1[2];//pipe from here to grep
-  if(pipe(p1) < 0){
-    fprintf(stderr, "[%s]: %s\n", NAME, PIPE_ERROR);
-    return FALSE;
-  }
-  close(p1[0]);  // Close reading end of pipe
-
-  char * grep_args[]={"grep","-E","--text",regexp,NULL};
-  pid_t grep_pid=exec_command("/bin/egrep",grep_args,p1[1],fileno(fout));//fileno(fout)
-
-
-  //close(p1[1]);
-  //fclose(fout);
-  wait_command(grep_pid);
-
-  return TRUE;
-}
-
 int main(int argc, char * argv[]){
-
+/*
   FILE * fout = fopen("data/f1.out", "w");
   if(fout == NULL){
     fprintf(stderr, "[%s]: '%s' %s\n", NAME, "file.out", FILE_ERROR);
     exit(EXIT_FAILURE);
   }
-  char str[]="123456789101112131415";
-  //printf("%d",sizeof(str));
-  fwrite(str , 1 , sizeof(str)-1 , fout);
-
-  filter("la","hola\nadios",fout);
-
-/*
+  filter("a","hola\nadios",fout);
+*/
   if(argc<2 || argc>3){
     fprintf(stderr, "[%s]: %s\n", NAME, USAGE_ERROR);
     exit(EXIT_FAILURE);
   }
+  FILE * fout;
+  FILE * ferr;
+  FILE * finput;
+  char * input_file_name;
+  char temp[MAX_PATH_LENGTH];
+  char line[MAX_LINE_LENGTH];
 
-  FILE * fp;
-  char * file_name;
 
   if(argc==3){
     fprintf(stderr, "[%s debug]: %s\n", NAME, "file");
-    file_name=argv[2];
-    fp = fopen(file_name , "r");
+    input_file_name=argv[2];
+    finput = fopen(input_file_name , "r");
   }
   else{
     fprintf(stderr, "[%s debug]: %s\n", NAME, "stdin");
-    file_name="stdin";
-    fp = stdin;
+    input_file_name="stdin";
+    finput = stdin;
   }
-  if(fp == NULL) {
-    fprintf(stderr, "[%s]: '%s' %s\n", NAME, file_name, FILE_ERROR);
+  if(finput == NULL) {
+    fprintf(stderr, "%s\n", "aaaaaaaaaaaaaaaaaaaaaa");
+    fprintf(stderr, "[%s]: '%s' %s\n", NAME, input_file_name, FILE_ERROR);
     exit(EXIT_FAILURE);
   }
+  snprintf(temp, MAX_PATH_LENGTH, "data/%s.out", input_file_name);
+  fout = fopen(temp , "w");
+  fclose(fout);
+  fout = fopen(temp , "r+");
+  if(fout == NULL) {
+    fprintf(stderr, "[%s]: '%s' %s\n", NAME, temp, FILE_ERROR);
+    exit(EXIT_FAILURE);
+  }//TODO:check if already full
+
 
   //read and execute each line
-  char line[MAX_LINE_LENGTH];
   int done=FALSE;
-  flock(fileno(fp), LOCK_EX);//TODO: lock de escritura???
+  int counter=0;
+  flock(fileno(finput), LOCK_EX);//TODO: lock de escritura???
   while(!done) {
-    if(fgets (line, MAX_LINE_LENGTH, fp)==NULL){
+    if(fgets (line, MAX_LINE_LENGTH, finput)==NULL){
       done=TRUE;
     }
 
     if(!done){
       fprintf(stderr, "[%s debug] line: %s", NAME, line);
-      exec_line(line);
+      snprintf(temp, MAX_PATH_LENGTH, "data/%s.%d.err", input_file_name,counter);
+      ferr = fopen(temp , "w");
+      if(ferr == NULL) {
+        fprintf(stderr, "[%s]: '%s' %s\n", NAME, temp, FILE_ERROR);
+        exit(EXIT_FAILURE);
+      }
+      exec_line(line,fout,ferr);
+      fclose(ferr);
     }
+    counter++;
   }
-  flock(fileno(fp), LOCK_EX);//TODO: hasta que se termine de ejecutar???
-  fclose(fp);
-*/
+  flock(fileno(finput), LOCK_EX);//TODO: hasta que se termine de ejecutar???
+  fclose(finput);
+  fclose(fout);
   exit(EXIT_SUCCESS);
 }
 
@@ -189,8 +202,8 @@ int main(int argc, char * argv[]){
   ----leo fichero o stdin
   ----ejecuto cada linea
   filtrar la salida de cada linea
-  .escribir la salida en un fichero
-  .escribir salida de error en otro
+  --escribir la salida en un fichero
+  --escribir salida de error en otro
   .leer el status de error y escribirlo en stdout
 */
 
